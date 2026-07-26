@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """
 CHD Conversion Utility for RomM
 
@@ -13,9 +15,10 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from typing import List, Optional
 
 
-def find_executable(name: str, fallback_paths: list[str]) -> str | None:
+def find_executable(name: str, fallback_paths: List[str]) -> Optional[str]:
     """Find executable in system PATH or fallback locations."""
     found = shutil.which(name)
     if found:
@@ -27,7 +30,7 @@ def find_executable(name: str, fallback_paths: list[str]) -> str | None:
     return None
 
 
-def get_tools(custom_chdman: str | None = None, custom_7z: str | None = None):
+def get_tools(custom_chdman: Optional[str] = None, custom_7z: Optional[str] = None):
     """Locate chdman and 7-Zip binaries across Windows, macOS, and Linux."""
     home_dir = Path.home()
     chdman_fallbacks = [
@@ -79,7 +82,7 @@ def convert_cue_to_chd(chdman_bin: str, input_file: Path, output_chd: Path) -> b
 def process_directory(
     target_dir: Path,
     chdman_bin: str,
-    sevenzip_bin: str | None,
+    sevenzip_bin: Optional[str],
     keep_originals: bool = False,
 ):
     """Process all archives and cue/bin folders in the target directory."""
