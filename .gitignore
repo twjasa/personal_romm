@@ -13,7 +13,7 @@ dist
 dist-ssr
 coverage
 *.local
-
+romm_data
 /cypress/videos/
 /cypress/screenshots/
 
