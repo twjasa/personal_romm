@@ -1,5 +1,3 @@
-version: "3.8"
-
 volumes:
   mysql_data:
   romm_resources:
@@ -10,10 +8,15 @@ services:
     image: rommapp/romm:latest
     container_name: romm
     restart: unless-stopped
-    env_file: .env
+    env_file:
+      - path: .env
+        required: false
     environment:
-      - REDIS_HOST=romm-redis
-      - DB_HOST=romm-db
+      - REDIS_HOST=${REDIS_HOST:-romm-redis}
+      - DB_HOST=${DB_HOST:-romm-db}
+      - DB_NAME=${DB_NAME:-romm}
+      - DB_USER=${DB_USER:-romm}
+      - DB_PASSWD=${DB_PASSWD:-rommpassword}
       - ROMM_BASE_PATH=/romm
     ports:
       - "80:8080" # Maps port 80 of your machine to RomM (access via http://localhost)
@@ -33,12 +36,14 @@ services:
     image: mariadb:10.11
     container_name: romm-db
     restart: unless-stopped
-    env_file: .env
+    env_file:
+      - path: .env
+        required: false
     environment:
-      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWD}
-      - MARIADB_DATABASE=${DB_NAME}
-      - MARIADB_USER=${DB_USER}
-      - MARIADB_PASSWORD=${DB_PASSWD}
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWD:-rootpassword}
+      - MARIADB_DATABASE=${DB_NAME:-romm}
+      - MARIADB_USER=${DB_USER:-romm}
+      - MARIADB_PASSWORD=${DB_PASSWD:-rommpassword}
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
